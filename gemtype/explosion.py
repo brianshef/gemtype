@@ -27,9 +27,3 @@ class Explosion(arcade.Sprite):
             self.set_texture(self.current_texture)
         else:
             self.kill()
-
-def create_explosion(texture_list, x, y):
-    x = Explosion(texture_list)
-    x.center_x = x
-    x.center_y = y
-    return x

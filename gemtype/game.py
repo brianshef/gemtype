@@ -3,6 +3,7 @@ import os
 import random
 from . import ball
 from . import explosion
+from . import background
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -17,6 +18,7 @@ class Game(arcade.Window):
         super().__init__(width, height, 'GemType by Brian Shef')
         self.ball = None
         self.explosions_list = None
+        self.shapes = None
 
     def setup(self):
         # Set the working directory (where we expect to find files) to the same
@@ -28,13 +30,14 @@ class Game(arcade.Window):
 
         arcade.set_background_color(arcade.color.DARK_SLATE_GRAY)
 
-        # Make the mouse disappear when it is over the window.
-        # So we just see our object, not the pointer.
-        self.set_mouse_visible(False)
         self.ball = ball.Ball(SCREEN_WIDTH, SCREEN_HEIGHT, 50, 50, 0, 0, 15, arcade.color.MAGENTA)
 
         # Sprite lists
         self.explosions_list = arcade.SpriteList()
+
+        # Shape lists
+        self.shapes = arcade.ShapeElementList()
+        self.shapes.append(background.get_new_background(SCREEN_WIDTH, SCREEN_HEIGHT))
 
         # Pre-load the animation frames. We don't do this in the __init__ because it
         # takes too long and would cause the game to pause.
@@ -53,7 +56,7 @@ class Game(arcade.Window):
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
-        # Your drawing code goes here
+        self.shapes.draw()
         arcade.draw_text('K A I A', 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 32)
         self.ball.draw()
         self.explosions_list.draw()
