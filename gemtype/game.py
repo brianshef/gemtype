@@ -25,9 +25,7 @@ class Game(arcade.Window):
 
     def setup(self):
         # Set the working directory (where we expect to find files) to the same
-        # directory this .py file is in. You can leave this out of your own
-        # code, but it is needed to easily run the examples using "python -m"
-        # as mentioned at the top of this program.
+        # directory this .py file is in.
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
@@ -54,10 +52,7 @@ class Game(arcade.Window):
             # This code loads all of the explosion0000.png to explosion0270.png files
             # that are part of this explosion.
             texture_name = f"assets/explosion/purple_dust/explosion{i:04d}.png"
-
             self.explosion_texture_list.append(arcade.load_texture(texture_name))
-
-        # self.explosions_list.preload_textures(self.explosion_texture_list)
 
     def on_draw(self):
         """ Render the screen. """
