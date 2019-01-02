@@ -9,6 +9,9 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 MOVEMENT_SPEED = 3
 EXPLOSION_TEXTURE_COUNT = 160
+STALACTITE_COUNT = 64
+
+pos = None
 
 
 class Game(arcade.Window):
@@ -38,6 +41,9 @@ class Game(arcade.Window):
         # Shape lists
         self.shapes = arcade.ShapeElementList()
         self.shapes.append(background.get_new_background(SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.shapes.append(background.create_ceiling(SCREEN_WIDTH, SCREEN_HEIGHT))
+        for s in background.create_stalactites(SCREEN_WIDTH, SCREEN_HEIGHT, STALACTITE_COUNT):
+            self.shapes.append(s)
 
         # Pre-load the animation frames. We don't do this in the __init__ because it
         # takes too long and would cause the game to pause.
@@ -57,7 +63,7 @@ class Game(arcade.Window):
         """ Render the screen. """
         arcade.start_render()
         self.shapes.draw()
-        arcade.draw_text('K A I A', 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 32)
+        arcade.draw_text(str(self.ball.position_x) + ' ' + str(self.ball.position_y), 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 32)
         self.ball.draw()
         self.explosions_list.draw()
 
