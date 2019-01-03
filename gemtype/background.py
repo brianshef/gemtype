@@ -14,14 +14,13 @@ def create_ceiling(max_width, max_height):
 
 def create_stalactites(max_width, max_height, n=16):
     stalactites = []
-    MAX_STALACTITE_HEIGHT = max_height/4
+    MAX_STALACTITE_HEIGHT = max_height / 4
     for _ in range(0, n):
-        p1 = (randint(0, max_width - MAX_STALACTITE_WIDTH), max_height)
-        p2 = (randint(p1[0] + MAX_STALACTITE_WIDTH/10, p1[0] + MAX_STALACTITE_WIDTH), max_height)
-        mid = (p1[0] + p2[0])/2
-        p3 = (mid, randint(MAX_STALACTITE_HEIGHT, max_height-10))
+        p1 = (randint(0, max_width), max_height)
+        p2 = (randint(p1[0] + 10, p1[0] + MAX_STALACTITE_WIDTH), max_height)
+        mid = int((p1[0] + p2[0]) / 2)
+        p3 = (randint(mid - 20, mid + 20), randint(MAX_STALACTITE_HEIGHT, max_height - 10))
         points = (p1, p2, p3)
-        print(points)
         colors = (arcade.color.DARK_GRAY, arcade.color.DARK_GRAY, arcade.color.DIM_GRAY)
         t = arcade.create_triangles_filled_with_colors(points, colors)
         stalactites.append(t)
