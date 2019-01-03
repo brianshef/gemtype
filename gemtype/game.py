@@ -4,6 +4,7 @@ import random
 from . import ball
 from . import explosion
 from . import background
+from . import grid
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -19,22 +20,19 @@ class Game(arcade.Window):
 
     def __init__(self, width, height):
         super().__init__(width, height, 'GemType by Brian Shef')
-        self.ball = None
-        self.explosions_list = None
-        self.shapes = None
 
-    def setup(self):
         # Set the working directory (where we expect to find files) to the same
         # directory this .py file is in.
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
+        self.ball = None
+        self.explosions_list = None
+        self.shapes = None
+        self.grid = None
+
+    def setup(self):
         arcade.set_background_color(arcade.color.DARK_SLATE_GRAY)
-
-        self.ball = ball.Ball(SCREEN_WIDTH, SCREEN_HEIGHT, 50, 50, 0, 0, 15, arcade.color.MAGENTA)
-
-        # Sprite lists
-        self.explosions_list = arcade.SpriteList()
 
         # Shape lists
         self.shapes = arcade.ShapeElementList()
@@ -42,6 +40,12 @@ class Game(arcade.Window):
         self.shapes.append(background.create_ceiling(SCREEN_WIDTH, SCREEN_HEIGHT))
         for s in background.create_stalactites(SCREEN_WIDTH, SCREEN_HEIGHT, STALACTITE_COUNT):
             self.shapes.append(s)
+        
+        # Game Grid
+        self.grid = grid.Grid(screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)
+        
+        # Sprite lists
+        self.explosions_list = arcade.SpriteList()
 
         # Pre-load the animation frames. We don't do this in the __init__ because it
         # takes too long and would cause the game to pause.
@@ -53,17 +57,19 @@ class Game(arcade.Window):
             # that are part of this explosion.
             texture_name = f"assets/explosion/purple_dust/explosion{i:04d}.png"
             self.explosion_texture_list.append(arcade.load_texture(texture_name))
+        
+        # Misc objects
+        self.ball = ball.Ball(SCREEN_WIDTH, SCREEN_HEIGHT, 50, 50, 0, 0, 15, arcade.color.MAGENTA)
 
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
         self.shapes.draw()
-        arcade.draw_text(str(self.ball.position_x) + ' ' + str(self.ball.position_y), 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 32)
+        self.grid.draw()
         self.ball.draw()
         self.explosions_list.draw()
 
-        # Finish drawing and display the result
-        # arcade.finish_render()
+        arcade.draw_text(str(self.ball.position_x) + ' ' + str(self.ball.position_y), 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 32)
 
     def update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
