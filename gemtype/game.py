@@ -3,14 +3,12 @@ import os
 import random
 import glob
 from string import ascii_uppercase
-from . import ball
 from . import explosion
 from . import background
 from . import grid
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
-MOVEMENT_SPEED = 3
 STALACTITE_COUNT = 64
 ALPHA_START = 97
 
@@ -34,7 +32,6 @@ class Game(arcade.Window):
             self.alphabet[str(alpha_key)] = ascii_uppercase[i]
             alpha_key += 1
 
-        self.ball = None
         self.explosions_list = None
         self.shapes = None
         self.grid = None
@@ -62,52 +59,46 @@ class Game(arcade.Window):
             self.explosion_texture_list.append(arcade.load_texture(t))
 
         # Misc objects
-        self.ball = ball.Ball(SCREEN_WIDTH, SCREEN_HEIGHT, 50, 50, 0, 0, 15, arcade.color.MAGENTA)
+        pass
 
     def on_draw(self):
         """ Render the screen. """
         arcade.start_render()
         self.shapes.draw()
         self.grid.draw()
-        self.ball.draw()
         self.explosions_list.draw()
 
-        arcade.draw_text(str(self.ball.position_x) + ' ' + str(self.ball.position_y), 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 32)
+        arcade.draw_text('PRE-ALPHA', 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 28)
 
     def update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
-        self.ball.update()
         self.explosions_list.update()
     
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        try:
-            letter = self.alphabet[str(key)]
-            print('User pressed ' + letter + ' key')
-            self.grid.get_positions_of_letter_block(letter)
-        except Exception:
-            pass
-        if key == arcade.key.LEFT:
-            self.ball.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
-            self.ball.change_x = MOVEMENT_SPEED
-        elif key == arcade.key.UP:
-            self.ball.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
-            self.ball.change_y = -MOVEMENT_SPEED
-        elif key == arcade.key.SPACE:
-            x = explosion.Explosion(self.explosion_texture_list)
-            x.center_x = self.ball.position_x
-            x.center_y = self.ball.position_y
-            self.explosions_list.append(x)
-
+        pass
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
-        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.ball.change_x = 0
-        elif key == arcade.key.UP or key == arcade.key.DOWN:
-            self.ball.change_y = 0
+        try:
+            letter = self.alphabet[str(key)]
+            print('User pressed ' + letter + ' key')
+            positions = self.grid.get_positions_of_letter_block(letter)
+            for p in positions:
+                print('Going to explode @ ' + str(p) + ' ... ')
+                self.explode(p)
+        except Exception:
+            pass
+        if key == arcade.key.SPACE:
+            self.explode()
+    
+    def explode(self, position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)):
+        """ Adds an explosion sprite animation at the supplied position """
+        x = explosion.Explosion(self.explosion_texture_list)
+        x.center_x = position[0]
+        x.center_y = position[1]
+        print('Exploding @ ' + str(position))
+        self.explosions_list.append(x)
 
 
 def main():

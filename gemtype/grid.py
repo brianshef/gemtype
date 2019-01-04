@@ -48,11 +48,16 @@ class Grid:
         positions = []
         ids = self.alpha_blocks[letter]
         for i in ids:
-            c = i[0:len(i)//2]
-            r = i[len(i)//2 if len(i)%2 == 0 else ((len(i)//2)+1):]
-            b = self.grid[int(r)][int(c)]
-            positions.append(
-                (b.center_x, b.center_y)
-            )
+            p = self.block_id_to_row_column(i)
+            b = self.grid[p[0]][p[1]]
+            positions.append( (b.center_x, b.center_y) )
         print(positions)
+        return positions
+    
+    def block_id_to_row_column(self, i):
+        if len(i) <= 0:
+            return ()
+        row = i[0:len(i)//2]
+        col = i[len(i)//2 if len(i)%2 == 0 else ((len(i)//2)+1):]
+        return (int(row), int(col))
         

@@ -7,7 +7,7 @@ SPRITE_SCALING = 0.40
 
 class Block:
     def __init__(self, size, margin, row, column, texture_name=None):
-        self.id = str(column) + str(row)
+        self.id = str(row) + str(column)
         self.size = size
         self.margin = margin
         self.row = row
