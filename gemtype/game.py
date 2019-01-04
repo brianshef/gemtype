@@ -1,6 +1,8 @@
 import arcade
 import os
 import random
+import glob
+from string import ascii_uppercase
 from . import ball
 from . import explosion
 from . import background
@@ -9,8 +11,8 @@ from . import grid
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 MOVEMENT_SPEED = 3
-EXPLOSION_TEXTURE_COUNT = 160
 STALACTITE_COUNT = 64
+ALPHA_START = 97
 
 pos = None
 
@@ -25,6 +27,12 @@ class Game(arcade.Window):
         # directory this .py file is in.
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
+
+        self.alphabet = {}
+        alpha_key = ALPHA_START
+        for i in range(0, len(ascii_uppercase)):
+            self.alphabet[str(alpha_key)] = ascii_uppercase[i]
+            alpha_key += 1
 
         self.ball = None
         self.explosions_list = None
@@ -50,14 +58,9 @@ class Game(arcade.Window):
         # Pre-load the animation frames. We don't do this in the __init__ because it
         # takes too long and would cause the game to pause.
         self.explosion_texture_list = []
+        for t in glob.glob('assets/explosion/purple_dust/explosion*.png'):
+            self.explosion_texture_list.append(arcade.load_texture(t))
 
-        for i in range(EXPLOSION_TEXTURE_COUNT):
-            # Files from http://www.explosiongenerator.com are numbered sequentially.
-            # This code loads all of the explosion0000.png to explosion0270.png files
-            # that are part of this explosion.
-            texture_name = f"assets/explosion/purple_dust/explosion{i:04d}.png"
-            self.explosion_texture_list.append(arcade.load_texture(texture_name))
-        
         # Misc objects
         self.ball = ball.Ball(SCREEN_WIDTH, SCREEN_HEIGHT, 50, 50, 0, 0, 15, arcade.color.MAGENTA)
 
@@ -78,6 +81,12 @@ class Game(arcade.Window):
     
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
+        try:
+            letter = self.alphabet[str(key)]
+            print('User pressed ' + letter + ' key')
+            self.grid.get_positions_of_letter_block(letter)
+        except Exception:
+            pass
         if key == arcade.key.LEFT:
             self.ball.change_x = -MOVEMENT_SPEED
         elif key == arcade.key.RIGHT:
@@ -91,6 +100,7 @@ class Game(arcade.Window):
             x.center_x = self.ball.position_x
             x.center_y = self.ball.position_y
             self.explosions_list.append(x)
+
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """

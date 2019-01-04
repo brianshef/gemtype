@@ -1,6 +1,7 @@
 import arcade
 import glob
 from random import randint, choice
+from string import ascii_uppercase
 from . import block
 
 ALPHA_CHANCE = 10
@@ -16,8 +17,10 @@ class Grid:
         self.grid = []
         self.stone_textures = glob.glob('assets/blocks/*.png')
         self.gem_textures = glob.glob('assets/gems/*.png')
+        self.alpha_blocks = {}
+        for i in ascii_uppercase:
+            self.alpha_blocks[i] = []
             
-
         # Initialize the grid of blocks
         for row in range(self.row_count):
             self.grid.append([])
@@ -33,7 +36,23 @@ class Grid:
     def generate_block(self, row, column):
         t = randint(0, 99)
         if t < ALPHA_CHANCE and row >= MIN_ROW_BLOCK:
-            return block.AlphaBlock(self.cell_width, self.margin, row, column, texture_name=choice(self.gem_textures), back_texture_name=choice(self.stone_textures))
+            b = block.AlphaBlock(self.cell_width, self.margin, row, column, texture_name=choice(self.gem_textures), back_texture_name=choice(self.stone_textures))
+            self.alpha_blocks[b.text].append(b.id)
+            return b
         elif row >= MIN_ROW_BLOCK:
             return block.StoneBlock(self.cell_width, self.margin, row, column, texture_name=choice(self.stone_textures))
         return block.Block(self.cell_width, self.margin, row, column)
+    
+    def get_positions_of_letter_block(self, letter):
+        print('Position of blocks with letter ' + letter)
+        positions = []
+        ids = self.alpha_blocks[letter]
+        for i in ids:
+            c = i[0:len(i)//2]
+            r = i[len(i)//2 if len(i)%2 == 0 else ((len(i)//2)+1):]
+            b = self.grid[int(r)][int(c)]
+            positions.append(
+                (b.center_x, b.center_y)
+            )
+        print(positions)
+        
