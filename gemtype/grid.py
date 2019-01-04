@@ -3,7 +3,7 @@ from random import randint
 from . import block
 
 ALPHA_CHANCE = 10
-MIN_ROW_ALPHA = 5
+MIN_ROW_BLOCK = 8
 
 class Grid:
     def __init__(self, cell_width=50, cell_height=50, margin=1, screen_width=800, screen_height=600):
@@ -28,6 +28,8 @@ class Grid:
 
 def generate_block(size, margin, row, column):
     t = randint(0, 99)
-    if t < ALPHA_CHANCE and row >= MIN_ROW_ALPHA:
+    if t < ALPHA_CHANCE and row >= MIN_ROW_BLOCK:
         return block.AlphaBlock(size, margin, row, column)
+    elif row >= MIN_ROW_BLOCK:
+        return block.StoneBlock(size, margin, row, column)
     return block.Block(size, margin, row, column)
