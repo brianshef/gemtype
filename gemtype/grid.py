@@ -50,7 +50,7 @@ class Grid:
         for i in ids:
             p = self.block_id_to_row_column(i)
             b = self.grid[p[0]][p[1]]
-            positions.append( (b.center_x, b.center_y) )
+            positions.append( (b.x, b.y) )
         print(positions)
         return positions
     

@@ -2,7 +2,7 @@ import arcade
 from random import choice
 from string import ascii_uppercase
 
-FONT_SIZE = 32
+FONT_SIZE = 28
 SPRITE_SCALING = 0.40
 
 class Block:
@@ -12,10 +12,9 @@ class Block:
         self.margin = margin
         self.row = row
         self.column = column
+        # Center coordinates
         self.x = (self.margin + self.size) * self.column + self.margin + self.size // 2
         self.y = (self.margin + self.size) * self.row + self.margin + self.size // 2
-        self.center_x = self.x + self.size // 2
-        self.center_y = self.y + self.size // 2
         self.color = (0, 0, 0, 0)
         self.sprite = None
         self.back_sprite = None
@@ -58,11 +57,11 @@ class AlphaBlock(Block):
     def draw(self):
         Block.draw(self)
         arcade.draw_text(self.text,
-                         self.x - self.size // 3.5,
-                         self.center_y,
-                         arcade.color.WHITE,
-                         FONT_SIZE,
-                         align="left", anchor_x="left", anchor_y="top")
+                         start_x=self.x, start_y=self.y,
+                         color=(10, 10, 10, 135),
+                         font_size=FONT_SIZE,
+                         align="center",
+                         anchor_x="center", anchor_y="center")
 
 
 
@@ -70,4 +69,3 @@ class StoneBlock(Block):
     def __init__(self, size, margin, row, column, texture_name=None):
         Block.__init__(self, size, margin, row, column, texture_name)
         self.color = arcade.color.DIM_GRAY
-

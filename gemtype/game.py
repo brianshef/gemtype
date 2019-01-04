@@ -68,7 +68,8 @@ class Game(arcade.Window):
         self.grid.draw()
         self.explosions_list.draw()
 
-        arcade.draw_text('PRE-ALPHA', 20, SCREEN_HEIGHT - 48, arcade.color.WHITE, 28)
+        arcade.draw_text('PRE-ALPHA', 16, SCREEN_HEIGHT - 16, (10, 10, 10, 120), 14)
+        arcade.draw_text('PRE-ALPHA', 14, SCREEN_HEIGHT - 14, arcade.color.WHITE, 14)
 
     def update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
