@@ -7,8 +7,22 @@ from . import explosion
 from . import background
 from . import grid
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+# Set how many rows and columns we will have
+ROW_COUNT = 15
+COLUMN_COUNT = 25
+
+# This sets the SIZE (length of a side) of each grid cell
+CELL_SIZE = 50
+
+# This sets the margin between each cell
+# and on the edges of the screen.
+MARGIN = 4
+
+# Do the math to figure out oiur screen dimensions
+SCREEN_WIDTH = (CELL_SIZE + MARGIN) * COLUMN_COUNT + MARGIN
+SCREEN_HEIGHT = (CELL_SIZE + MARGIN) * ROW_COUNT + MARGIN
+
+# Game constants
 STALACTITE_COUNT = 64
 ALPHA_START = 97
 
@@ -43,11 +57,13 @@ class Game(arcade.Window):
         self.shapes = arcade.ShapeElementList()
         self.shapes.append(background.get_new_background(SCREEN_WIDTH, SCREEN_HEIGHT))
         self.shapes.append(background.create_ceiling(SCREEN_WIDTH, SCREEN_HEIGHT))
-        for s in background.create_stalactites(SCREEN_WIDTH, SCREEN_HEIGHT, STALACTITE_COUNT):
-            self.shapes.append(s)
         
         # Game Grid
-        self.grid = grid.Grid(screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)
+        self.grid = grid.Grid(
+            cell_size=CELL_SIZE, margin=MARGIN,
+            row_count=ROW_COUNT, column_count=COLUMN_COUNT,
+            screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT
+        )
         
         # Sprite lists
         self.explosions_list = arcade.SpriteList()

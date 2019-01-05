@@ -8,12 +8,11 @@ ALPHA_CHANCE = 10
 MIN_ROW_BLOCK = 8
 
 class Grid:
-    def __init__(self, cell_width=50, cell_height=50, margin=1, screen_width=800, screen_height=600):
-        self.cell_width = cell_width
-        self.cell_height = cell_height
+    def __init__(self, cell_size=50, margin=1, row_count=15, column_count=15, screen_width=800, screen_height=600):
+        self.cell_size = cell_size
         self.margin = margin
-        self.row_count = int(screen_height / (cell_width + margin))
-        self.column_count = int(screen_width / (cell_height + margin))
+        self.row_count = row_count
+        self.column_count = column_count
         self.grid = []
         self.stone_textures = glob.glob('assets/blocks/*.png')
         self.gem_textures = glob.glob('assets/gems/*.png')
@@ -36,12 +35,12 @@ class Grid:
     def generate_block(self, row, column):
         t = randint(0, 99)
         if t < ALPHA_CHANCE and row >= MIN_ROW_BLOCK:
-            b = block.AlphaBlock(self.cell_width, self.margin, row, column, texture_name=choice(self.gem_textures), back_texture_name=choice(self.stone_textures))
+            b = block.AlphaBlock(self.cell_size, self.margin, row, column, texture_name=choice(self.gem_textures), back_texture_name=choice(self.stone_textures))
             self.alpha_blocks[b.text].append(b.id)
             return b
         elif row >= MIN_ROW_BLOCK:
-            return block.StoneBlock(self.cell_width, self.margin, row, column, texture_name=choice(self.stone_textures))
-        return block.Block(self.cell_width, self.margin, row, column)
+            return block.StoneBlock(self.cell_size, self.margin, row, column, texture_name=choice(self.stone_textures))
+        return block.Block(self.cell_size, self.margin, row, column)
     
     def get_positions_of_letter_block(self, letter):
         print('Position of blocks with letter ' + letter)

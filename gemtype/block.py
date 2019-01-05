@@ -3,6 +3,7 @@ from random import choice
 from string import ascii_uppercase
 
 FONT_SIZE = 28
+IMAGE_SIZE = 128
 SPRITE_SCALING = 0.40
 
 class Block:
@@ -21,7 +22,7 @@ class Block:
         if texture_name is not None:
             self.sprite = arcade.Sprite(
                 texture_name, SPRITE_SCALING,
-                image_height=128, image_width=128,
+                image_height=IMAGE_SIZE, image_width=IMAGE_SIZE,
                 center_x=self.x, center_y=self.y
             )
     
@@ -43,14 +44,14 @@ class AlphaBlock(Block):
         self.text = choice(ascii_uppercase)
         if texture_name is not None:
             self.sprite = arcade.Sprite(
-                texture_name, 0.65,
+                texture_name, 0.70,
                 image_height=128, image_width=128,
                 center_x=self.x, center_y=self.y
             )
         if back_texture_name is not None:
             self.back_sprite = arcade.Sprite(
                 back_texture_name, SPRITE_SCALING,
-                image_height=128, image_width=128,
+                image_height=IMAGE_SIZE, image_width=IMAGE_SIZE,
                 center_x=self.x, center_y=self.y
             )
 
